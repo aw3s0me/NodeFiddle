@@ -2,6 +2,7 @@ var http = require('http');
 var fs = require('fs'); //filesystem functionality
 var mime = require('mime'); //provides ability to derive a MIME type based on a filename extension
 var path = require('path');
+var chatServer = require('./lib/chat_server');
 var cache = {}; //is where the contents of cached files are stored
 
 function send404(response) {
@@ -41,7 +42,7 @@ function serveStatic(response, cache, absPath) {
                 });
             }
             else {
-                send404(reponse);
+                send404(response);
             }
         });
     }
@@ -58,8 +59,11 @@ var server = http.createServer(function(request, response) {
     }
 
     var absPath = './' + filePath;
+    console.log(absPath);
     serveStatic(response, cache, absPath);
 });
+
+chatServer.listen(server);
 
 server.listen(3000, function() {
     console.log('Server listening on port 3000');
